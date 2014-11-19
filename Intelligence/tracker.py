@@ -20,8 +20,11 @@ class Tracker():
         else:
             if re.match(self.pattern_time_status, status_time) and current_activity is not None:
                 period = ([int(s) for s in status_time.split() if s.isdigit()])[0]
-                end = current_time - datetime.timedelta(minutes=period)
-                record = {"start": current_activity, "end": end}
+                end_time = current_time - datetime.timedelta(minutes=period)
+                end = datetime.datetime(end_time.year, end_time.month, end_time.day, end_time.hour, end_time.minute)
+                start = datetime.datetime(current_activity.tm_year, current_activity.tm_mon, current_activity.tm_mday,
+                                          current_activity.tm_hour, current_activity.tm_min)
+                record = {"start": start, "end": end}
                 if status_device:
                     record['device'] = 'mobile'
                 self.service.endActivity(record)
